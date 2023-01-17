@@ -18,9 +18,12 @@ set COMPUTER_VISION_NAME=<name>
 2. Create python virtual environment
    `python -m venv virtualenv`
 3. Activate python virtual environment
-   `.\virtualenv\Scripts\activate`
-   or
+
    ```
+   .\virtualenv\Scripts\activate
+   
+      or
+   
    cd virtualenv\Scripts
    activate
    cd ../..
@@ -29,5 +32,5 @@ set COMPUTER_VISION_NAME=<name>
    `pip install -r requirements.txt`
 
 ### Run application
-
+Set the environment variables mentioned above
 `flask --app controller run`
