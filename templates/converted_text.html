@@ -1,12 +1,15 @@
 {% include "header.html" %}
 
 {% include "form.html" %}
-
-<div><h2>Find the below converted digital text</h2></div>
 <hr/>
-
-<pre>
-    {{ digital_text }}
-</pre>
+<div class="row result_header">
+    Find the below converted digital text
+</div>
+<hr/>
+<div class="print_output">
+    <pre>
+        {{ digital_text }}
+    </pre>
+</div>
 
 {% include "footer.html" %}

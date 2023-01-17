@@ -1,7 +1,28 @@
-<div>
-    <form action="/results">
-      <label>Image URL: </label>
-      <input type="text" placeholder="Place the handwritten image url here" name="image_url">
-      <button type="submit"><i class="glyphicon glyphicon-refresh"></i></button>
-    </form>
+<div class="row">
+    <div class="hidden-md col-lg-1"></div>
+    <div class="col-md-12 col-lg-4 my-form">
+        <h4>Convert a handwritten text image from an url</h4>
+        <div>
+            <form action="/convert_from_url" method="POST">
+              <label>Image URL: </label>
+              <input type="text" placeholder="Place the handwritten image url here" name="image_url">
+              <button type="submit"><i class="glyphicon glyphicon-refresh"></i></button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-2 or_txt">
+       ( OR )
+    </div>
+    <div class="col-md-12 col-lg-4 my-form">
+        <h4>Convert a handwritten text image by uploading</h4>
+        <div>
+            <form action="/convert_from_local" method="POST" enctype="multipart/form-data">
+              <label>Upload image: </label>
+              <input type="file"
+               accept="image/png, image/jpeg, image/jpg" placeholder="Upload the image here" name="image">
+              <button type="submit"><i class="glyphicon glyphicon-upload"></i></button>
+            </form>
+        </div>
+    </div>
+    <div class="hidden-md col-lg-1"></div>
 </div>
