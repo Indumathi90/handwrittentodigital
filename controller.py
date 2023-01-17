@@ -1,7 +1,6 @@
 import os
 import time
 
-from PIL import Image
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from flask import Flask, render_template, request
@@ -36,27 +35,14 @@ def convert_from_local():
 
 
 def convert_text_from_uploaded_image(image_stream):
-    read_response = computer_vision_client.read_in_stream(image_stream, raw=True, language='en')
-    read_operation_location = read_response.headers["Operation-Location"]
-    operation_id = read_operation_location.split("/")[-1]
-    while True:
-        read_result = computer_vision_client.get_read_result(operation_id)
-        if read_result.status not in ['notStarted', 'running']:
-            break
-        time.sleep(1)
-
-    digital_text = ""
-    # Print the detected text, line by line
-    if read_result.status == OperationStatusCodes.succeeded:
-        for text_result in read_result.analyze_result.read_results:
-            for line in text_result.lines:
-                digital_text = digital_text + '\n' + line.text
-
-    return digital_text
+    return convert(computer_vision_client.read_in_stream(image_stream, raw=True, language='en'))
 
 
 def convert_text_from_image_url(image_url):
-    read_response = computer_vision_client.read(image_url, raw=True, language='en')
+    return convert(computer_vision_client.read(image_url, raw=True, language='en'))
+
+
+def convert(read_response):
     read_operation_location = read_response.headers["Operation-Location"]
     operation_id = read_operation_location.split("/")[-1]
     while True:
