@@ -7,6 +7,11 @@ To run this locally, set the below environment variables
 * COMPUTER_VISION_KEY
 * COMPUTER_VISION_NAME
 
+```
+set COMPUTER_VISION_KEY=<key>
+set COMPUTER_VISION_NAME=<name>
+```
+
 ### Set up
 
 1. Open command prompt or terminal
