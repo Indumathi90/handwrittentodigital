@@ -61,3 +61,7 @@ def convert(operation_id):
                 digital_text = digital_text + '\n' + line.text
 
     return digital_text
+
+
+if __name__ == '__main__':
+    app.run()
