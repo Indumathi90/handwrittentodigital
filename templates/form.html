@@ -1,12 +1,12 @@
 <div class="row">
     <div class="hidden-md col-lg-1"></div>
     <div class="col-md-12 col-lg-4 my-form">
-        <h4>Convert a handwritten text image from an url</h4>
-        <div>
+        <div class="section-header">Convert a handwritten text image from an url</div>
+        <div class="convertor-form convert-from-url">
             <form action="/convert_from_url" method="POST">
-              <label>Image URL: </label>
-              <input type="text" placeholder="Place the handwritten image url here" name="image_url">
-              <button type="submit"><i class="glyphicon glyphicon-refresh"></i></button>
+                <label>Image URL: </label>
+                <input type="text" placeholder="Place the handwritten image url here" name="image_url">
+                <button type="submit" class="convert-button btn btn-primary mb-2">Read and convert <i class="glyphicon glyphicon-refresh"></i></button>
             </form>
         </div>
     </div>
@@ -14,13 +14,12 @@
        ( OR )
     </div>
     <div class="col-md-12 col-lg-4 my-form">
-        <h4>Convert a handwritten text image by uploading</h4>
-        <div>
+        <div class="section-header">Convert a handwritten text image by uploading</div>
+        <div class="convertor-form convert-from-local">
             <form action="/convert_from_local" method="POST" enctype="multipart/form-data">
-              <label>Upload image: </label>
-              <input type="file"
-               accept="image/png, image/jpeg, image/jpg" placeholder="Upload the image here" name="image">
-              <button type="submit"><i class="glyphicon glyphicon-upload"></i></button>
+                <label>Upload image: </label>
+                <input type="file" accept="image/png, image/jpeg, image/jpg" placeholder="Upload the image here" name="image">
+                <button type="submit" class="convert-button btn btn-primary mb-2">Upload and convert <i class="glyphicon glyphicon-upload"></i></button>
             </form>
         </div>
     </div>

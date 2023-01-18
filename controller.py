@@ -6,7 +6,10 @@ from azure.cognitiveservices.vision.computervision.models import OperationStatus
 from flask import Flask, render_template, request
 from msrest.authentication import CognitiveServicesCredentials
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='',
+            static_folder='static',
+            template_folder='templates')
 
 computer_vision_key = os.environ['COMPUTER_VISION_KEY']
 computer_vision_name = os.environ['COMPUTER_VISION_NAME']
@@ -23,28 +26,27 @@ def home():
 @app.route("/convert_from_url", methods=['POST'])
 def convert_from_url():
     image_url = request.form['image_url']
-    digital_text = convert_text_from_image_url(image_url)
-    return render_template('converted_text.html', digital_text=digital_text)
+    read_response = computer_vision_client.read(image_url, raw=True, language='en')
+    operation_id = get_operation_id_from_read_response(read_response)
+    digital_text = convert(operation_id)
+    return render_template('converted_text.html', digital_text=digital_text, operation_id=operation_id)
 
 
 @app.route("/convert_from_local", methods=['POST'])
 def convert_from_local():
     uploaded_image = request.files['image']
-    digital_text = convert_text_from_uploaded_image(uploaded_image)
-    return render_template('converted_text.html', digital_text=digital_text)
+    read_response = computer_vision_client.read_in_stream(uploaded_image, raw=True, language='en')
+    operation_id = get_operation_id_from_read_response(read_response)
+    digital_text = convert(operation_id)
+    return render_template('converted_text.html', digital_text=digital_text, operation_id=operation_id)
 
 
-def convert_text_from_uploaded_image(image_stream):
-    return convert(computer_vision_client.read_in_stream(image_stream, raw=True, language='en'))
-
-
-def convert_text_from_image_url(image_url):
-    return convert(computer_vision_client.read(image_url, raw=True, language='en'))
-
-
-def convert(read_response):
+def get_operation_id_from_read_response(read_response):
     read_operation_location = read_response.headers["Operation-Location"]
-    operation_id = read_operation_location.split("/")[-1]
+    return read_operation_location.split("/")[-1]
+
+
+def convert(operation_id):
     while True:
         read_result = computer_vision_client.get_read_result(operation_id)
         if read_result.status not in ['notStarted', 'running']:
