@@ -34,3 +34,6 @@ set COMPUTER_VISION_NAME=<name>
 ### Run application
 Set the environment variables mentioned above
 `flask run`
+
+
+Access website here --> http://hand-written-to-digital-text.azurewebsites.net/
