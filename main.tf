@@ -27,7 +27,7 @@ resource "azurerm_cognitive_account" "computer_vision" {
   kind                = "ComputerVision"
 
   public_network_access_enabled = true
-  sku_name = "S1"
+  sku_name = "F0"
 }
 output "computer_vision" {
   value = azurerm_cognitive_account.computer_vision
@@ -77,20 +77,20 @@ resource "azurerm_network_security_group" "nsg" {
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Tcp"
+    protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "5000"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
   security_rule {
-    name                       = "allow_ssh_sg"
+    name                       = "allow_rdp_sg"
     priority                   = 101
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "22"
+    destination_port_range     = "3389"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
@@ -104,7 +104,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   name                = "convertor-vm"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  size                = "Standard_B1ls"
+  size                = "Standard_B2s"
   admin_username      = "adminuser"
   admin_password      = "Password1234"
   network_interface_ids = [
