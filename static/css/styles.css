@@ -73,3 +73,10 @@ body {
 .url-info-panel {
     margin: 2px 30px;
 }
+.downloads {
+    text-align: center;
+    font-size: 22px;
+}
+.downloads a {
+    padding: 10px 50px;
+}

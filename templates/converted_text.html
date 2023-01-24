@@ -11,6 +11,19 @@
             <li>Please check if your input is valid</li>
         </ul>
     </div>
+{% else %}
+    <div class="downloads">
+        <a href="/download_as_pdf_file?operation_id={{ operation_id }}">
+            <i class="fa fa-file-pdf-o" aria-hidden="true">
+                Download as pdf file
+            </i>
+        </a>
+        <a href="/download_as_text_file?operation_id={{ operation_id }}">
+            <i class="fa fa-file-text-o" aria-hidden="true">
+                Download as txt file
+            </i>
+        </a>
+    </div>
 {% endif %}
 <hr/>
 <div class="row result_header">

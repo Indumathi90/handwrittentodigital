@@ -3,8 +3,9 @@ import time
 
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from msrest.authentication import CognitiveServicesCredentials
+from fpdf import FPDF, HTMLMixin
 
 app = Flask(__name__,
             static_url_path='',
@@ -16,6 +17,10 @@ computer_vision_name = os.environ['COMPUTER_VISION_NAME']
 computer_vision_endpoint = f"https://{computer_vision_name}.cognitiveservices.azure.com/"
 computer_vision_client = ComputerVisionClient(computer_vision_endpoint,
                                               CognitiveServicesCredentials(computer_vision_key))
+
+
+class MyFPDF(FPDF, HTMLMixin):
+    pass
 
 
 @app.route("/")
@@ -30,9 +35,11 @@ def convert_from_url():
         read_response = computer_vision_client.read(image_url, raw=True, language='en')
         operation_id = get_operation_id_from_read_response(read_response)
         digital_text = convert(operation_id)
-        return render_template('converted_text.html', digital_text=digital_text, failure=False)
-    except:
-        return render_template('converted_text.html', digital_text="", failure=True)
+        return render_template('converted_text.html', digital_text=digital_text, failure=False,
+                               operation_id=operation_id)
+    except Exception as e:
+        print(e)
+        return render_template('converted_text.html', digital_text="", failure=True, operation_id="")
 
 
 @app.route("/convert_from_local", methods=['POST'])
@@ -42,9 +49,33 @@ def convert_from_local():
         read_response = computer_vision_client.read_in_stream(uploaded_image, raw=True, language='en')
         operation_id = get_operation_id_from_read_response(read_response)
         digital_text = convert(operation_id)
-        return render_template('converted_text.html', digital_text=digital_text, failure=False)
-    except:
-        return render_template('converted_text.html', digital_text="", failure=True)
+        return render_template('converted_text.html', digital_text=digital_text, failure=False,
+                               operation_id=operation_id)
+    except Exception as e:
+        print(e)
+        return render_template('converted_text.html', digital_text="", failure=True, operation_id="")
+
+
+@app.route("/download_as_text_file", methods=['GET'])
+def download_as_text_file():
+    operation_id = request.args.get("operation_id")
+    digital_text = convert(operation_id)
+    response = app.response_class(response=digital_text, status=200, mimetype='application/txt',
+                                  headers={'Content-disposition': 'attachment; filename=converted_file.txt'})
+    return response
+
+
+@app.route("/download_as_pdf_file", methods=['GET'])
+def download_as_pdf_file():
+    operation_id = request.args.get("operation_id")
+    digital_text = convert(operation_id)
+    pdf = MyFPDF()
+    pdf.add_page()
+    pdf.write_html(digital_text)
+    response = make_response(pdf.output(dest='S'))
+    response.headers.set('Content-Disposition', 'attachment', filename='converted_file.pdf')
+    response.headers.set('Content-Type', 'application/pdf')
+    return response
 
 
 def get_operation_id_from_read_response(read_response):
