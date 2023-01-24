@@ -67,3 +67,6 @@ body {
     margin-left: 10px;
     width: 250px;
 }
+.alert.alert-danger {
+    margin: 2px 30px;
+}

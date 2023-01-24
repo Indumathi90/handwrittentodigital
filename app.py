@@ -26,19 +26,25 @@ def home():
 @app.route("/convert_from_url", methods=['POST'])
 def convert_from_url():
     image_url = request.form['image_url']
-    read_response = computer_vision_client.read(image_url, raw=True, language='en')
-    operation_id = get_operation_id_from_read_response(read_response)
-    digital_text = convert(operation_id)
-    return render_template('converted_text.html', digital_text=digital_text, operation_id=operation_id)
+    try:
+        read_response = computer_vision_client.read(image_url, raw=True, language='en')
+        operation_id = get_operation_id_from_read_response(read_response)
+        digital_text = convert(operation_id)
+        return render_template('converted_text.html', digital_text=digital_text, failure=False)
+    except:
+        return render_template('converted_text.html', digital_text="", failure=True)
 
 
 @app.route("/convert_from_local", methods=['POST'])
 def convert_from_local():
     uploaded_image = request.files['image']
-    read_response = computer_vision_client.read_in_stream(uploaded_image, raw=True, language='en')
-    operation_id = get_operation_id_from_read_response(read_response)
-    digital_text = convert(operation_id)
-    return render_template('converted_text.html', digital_text=digital_text, operation_id=operation_id)
+    try:
+        read_response = computer_vision_client.read_in_stream(uploaded_image, raw=True, language='en')
+        operation_id = get_operation_id_from_read_response(read_response)
+        digital_text = convert(operation_id)
+        return render_template('converted_text.html', digital_text=digital_text, failure=False)
+    except:
+        return render_template('converted_text.html', digital_text="", failure=True)
 
 
 def get_operation_id_from_read_response(read_response):

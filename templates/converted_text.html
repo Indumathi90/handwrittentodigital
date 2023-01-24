@@ -2,6 +2,17 @@
 
 {% include "form.html" %}
 <hr/>
+{% if failure %}
+    <div class="alert alert-danger" role="alert">
+        Unable to process the request at this time.
+        <ul>
+            <li>Please check if your input is not empty</li>
+            <li>Please check if your input is not malformed</li>
+            <li>Please check if your input is valid</li>
+        </ul>
+    </div>
+{% endif %}
+<hr/>
 <div class="row result_header">
     Converted digital text
 </div>
