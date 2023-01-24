@@ -33,4 +33,4 @@ set COMPUTER_VISION_NAME=<name>
 
 ### Run application
 Set the environment variables mentioned above
-`flask --app controller run`
+`flask run`
